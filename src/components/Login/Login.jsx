@@ -1,16 +1,48 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import google from '../../assets/google.jpg'
-
+import { useContext } from "react";
+import { AuthContext } from "../Provider/AuthProvider";
+import Swal from "sweetalert2";
 
 const Login = () => {
-    const handleLogin = e => {
+    const { signIn } = useContext(AuthContext);
+    const { googleLogin } = useContext(AuthContext);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const handleLogin = (e) => {
         e.preventDefault();
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email, password);
-    }
+        form.reset();
+
+        signIn(email, password)
+            .then((res) => {
+                console.log(res.user);
+                Swal.fire(
+                    'Good Job!',
+                    'You have successfully logged in!',
+                    'success'
+                );
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const handleGoogleLogin = () => {
+        googleLogin()
+            .then((res) => {
+                console.log(res.user);
+                navigate(location?.state ? location.state : '/')
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
     return (
         <div>
             <div className="bg-gray-100 flex items-center justify-center py-16">
@@ -29,7 +61,7 @@ const Login = () => {
                             <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Login</button>
                         </div>
                         <div className="mb-6 flex justify-center items-center">
-                            <img className='w-16 h-16 rounded-full cursor-pointer' src={google} alt="" />
+                            <img onClick={handleGoogleLogin} className='w-16 h-16 rounded-full cursor-pointer' src={google} alt="" />
                         </div>
                     </form>
                     <p className="text-gray-600 text-sm text-center">Don't have an account? <Link to="/register" className="text-blue-500">Register</Link></p>

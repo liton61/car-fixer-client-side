@@ -1,6 +1,18 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const Header = () => {
+    const { user, logOut } = useContext(AuthContext);
+    const handleSingOut = () => {
+        logOut()
+            .then(result => {
+                console.log(result.user)
+            })
+            .catch(error => {
+                console.error(error);
+            })
+    }
     return (
         <div>
             <div className="drawer">
@@ -35,14 +47,26 @@ const Header = () => {
                                 >
                                     Services
                                 </NavLink></li>
-                                <li className="mx-2"><NavLink
-                                    to="/login"
-                                    className={({ isActive, isPending }) =>
-                                        isPending ? "pending" : isActive ? "active" : ""
-                                    }
-                                >
-                                    Login
-                                </NavLink></li>
+                                {
+                                    user ?
+                                        <li><NavLink onClick={handleSingOut}
+                                            to="/login"
+                                            className={({ isActive, isPending }) =>
+                                                isPending ? "pending" : isActive ? "active" : ""
+                                            }
+                                        >
+                                            Sing Out
+                                        </NavLink></li>
+                                        :
+                                        <li><NavLink
+                                            to="/login"
+                                            className={({ isActive, isPending }) =>
+                                                isPending ? "pending" : isActive ? "active" : ""
+                                            }
+                                        >
+                                            Login
+                                        </NavLink></li>
+                                }
                             </ul>
                         </div>
                     </div>
@@ -67,14 +91,26 @@ const Header = () => {
                         >
                             Services
                         </NavLink></li>
-                        <li><NavLink
-                            to="/login"
-                            className={({ isActive, isPending }) =>
-                                isPending ? "pending" : isActive ? "active" : ""
-                            }
-                        >
-                            Login
-                        </NavLink></li>
+                        {
+                            user ?
+                                <li><NavLink onClick={handleSingOut}
+                                    to="/login"
+                                    className={({ isActive, isPending }) =>
+                                        isPending ? "pending" : isActive ? "active" : ""
+                                    }
+                                >
+                                    Sing Out
+                                </NavLink></li>
+                                :
+                                <li><NavLink
+                                    to="/login"
+                                    className={({ isActive, isPending }) =>
+                                        isPending ? "pending" : isActive ? "active" : ""
+                                    }
+                                >
+                                    Login
+                                </NavLink></li>
+                        }
                     </ul>
                 </div>
             </div>

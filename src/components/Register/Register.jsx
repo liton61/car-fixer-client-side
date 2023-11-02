@@ -1,13 +1,40 @@
+import { useContext } from "react";
+import { AuthContext } from "../Provider/AuthProvider";
+import Swal from "sweetalert2";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 const Register = () => {
+    const { createUser } = useContext(AuthContext);
+    const location = useLocation();
+    const navigate = useNavigate();
     const handleRegister = e => {
         e.preventDefault();
         const form = e.target;
-        const name = form.name.value;
+        // const name = form.name.value;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(name, email, password);
+        // console.log(name, email, password);
+        form.reset();
+        createUser(email, password)
+            .then(res => {
+                console.log(res.user);
+                Swal.fire(
+                    'Good Job !',
+                    'You have successfully register !',
+                    'success'
+                )
+                navigate(location?.state ? location.state : '/')
+            })
+            .catch(error => {
+                console.log(error);
+                if (password > 6) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: 'Password must be at least 6 character !',
+                    })
+                }
+            })
     }
     return (
         <div>
