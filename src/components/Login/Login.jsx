@@ -4,12 +4,19 @@ import google from '../../assets/google.jpg'
 
 
 const Login = () => {
+    const handleLogin = e => {
+        e.preventDefault();
+        const form = e.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        console.log(email, password);
+    }
     return (
         <div>
             <div className="bg-gray-100 flex items-center justify-center py-16">
                 <div className="bg-white w-96 p-8 rounded-lg shadow-lg">
                     <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Login</h2>
-                    <form>
+                    <form onSubmit={handleLogin}>
                         <div className="mb-4">
                             <label className="block text-gray-600 text-sm font-medium mb-2">Email</label>
                             <input type="email" id="email" name="email" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Enter your email" required />
